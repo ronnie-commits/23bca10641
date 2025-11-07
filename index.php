@@ -1,0 +1,1 @@
+<?php echo '<h1>Hospital Management System</h1><a href="pages/add_patient.php">Add Patient</a>'; ?>
