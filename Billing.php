@@ -1,0 +1,2 @@
+<?php
+require_once "db.php";class Billing{private $c;function __construct(){$this->c=(new Database())->connect();}function add($p,$amt){return $this->c->query("INSERT INTO bills(patient_id,amount,status)VALUES($p,$amt,'Unpaid')");}function all(){return $this->c->query("SELECT * FROM bills")->fetch_all(MYSQLI_ASSOC);}function pay($id){return $this->c->query("UPDATE bills SET status='Paid' WHERE id=$id");}}?>
