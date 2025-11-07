@@ -1,0 +1,1 @@
+<?php echo '<form method=post><input name=name><input name=age><input name=gender><input name=contact><button>Save</button></form>';?>
