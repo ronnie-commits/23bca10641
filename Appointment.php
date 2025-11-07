@@ -1,0 +1,2 @@
+<?php
+require_once "db.php";class Appointment{private $c;function __construct(){ $this->c=(new Database())->connect();}function add($p,$d,$da,$t){return $this->c->query("INSERT INTO appointments(patient_id,doctor_id,date,time)VALUES($p,$d,'$da','$t')");}function all(){return $this->c->query("SELECT appointments.*,patients.name AS patient,doctors.name AS doctor FROM appointments JOIN patients ON appointments.patient_id=patients.id JOIN doctors ON appointments.doctor_id=doctors.id")->fetch_all(MYSQLI_ASSOC);} }?>
