@@ -1,0 +1,197 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+struct Patient {
+    int id;
+    string name;
+    int age;
+    string gender;
+    string contact;
+};
+
+struct Doctor {
+    int id;
+    string name;
+    string specialty;
+};
+
+struct Appointment {
+    int id;
+    int patientId;
+    int doctorId;
+    string date;
+    string time;
+};
+
+struct Bill {
+    int id;
+    int patientId;
+    double amount;
+    string status;
+};
+
+class HospitalSystem {
+private:
+    vector<Patient> patients;
+    vector<Doctor> doctors;
+    vector<Appointment> appointments;
+    vector<Bill> bills;
+
+    int patientCounter = 1;
+    int doctorCounter = 1;
+    int appointmentCounter = 1;
+    int billCounter = 1;
+
+public:
+    // ---- Patient Section ----
+    void addPatient() {
+        Patient p;
+        p.id = patientCounter++;
+        cout << "Enter patient name: ";
+        cin.ignore();
+        getline(cin, p.name);
+        cout << "Enter age: ";
+        cin >> p.age;
+        cout << "Enter gender: ";
+        cin >> p.gender;
+        cout << "Enter contact number: ";
+        cin >> p.contact;
+        patients.push_back(p);
+        cout << "✅ Patient added successfully!\n";
+    }
+
+    void viewPatients() {
+        cout << "\n---- Patient Records ----\n";
+        cout << left << setw(5) << "ID" << setw(20) << "Name"
+             << setw(10) << "Age" << setw(10) << "Gender"
+             << setw(15) << "Contact" << endl;
+        for (auto &p : patients)
+            cout << left << setw(5) << p.id << setw(20) << p.name
+                 << setw(10) << p.age << setw(10) << p.gender
+                 << setw(15) << p.contact << endl;
+    }
+
+    // ---- Doctor Section ----
+    void addDoctor() {
+        Doctor d;
+        d.id = doctorCounter++;
+        cout << "Enter doctor name: ";
+        cin.ignore();
+        getline(cin, d.name);
+        cout << "Enter specialty: ";
+        getline(cin, d.specialty);
+        doctors.push_back(d);
+        cout << "✅ Doctor added successfully!\n";
+    }
+
+    void viewDoctors() {
+        cout << "\n---- Doctor List ----\n";
+        cout << left << setw(5) << "ID" << setw(20) << "Name" << setw(20) << "Specialty" << endl;
+        for (auto &d : doctors)
+            cout << left << setw(5) << d.id << setw(20) << d.name << setw(20) << d.specialty << endl;
+    }
+
+    // ---- Appointment Section ----
+    void addAppointment() {
+        if (patients.empty() || doctors.empty()) {
+            cout << "❌ Add patients and doctors first!\n";
+            return;
+        }
+        Appointment a;
+        a.id = appointmentCounter++;
+        cout << "Enter patient ID: ";
+        cin >> a.patientId;
+        cout << "Enter doctor ID: ";
+        cin >> a.doctorId;
+        cout << "Enter date (dd-mm-yyyy): ";
+        cin >> a.date;
+        cout << "Enter time (hh:mm): ";
+        cin >> a.time;
+        appointments.push_back(a);
+        cout << "✅ Appointment booked successfully!\n";
+    }
+
+    void viewAppointments() {
+        cout << "\n---- Appointments ----\n";
+        cout << left << setw(5) << "ID" << setw(10) << "PatID" << setw(10)
+             << "DocID" << setw(15) << "Date" << setw(10) << "Time" << endl;
+        for (auto &a : appointments)
+            cout << left << setw(5) << a.id << setw(10) << a.patientId
+                 << setw(10) << a.doctorId << setw(15) << a.date << setw(10) << a.time << endl;
+    }
+
+    // ---- Billing Section ----
+    void generateBill() {
+        if (patients.empty()) {
+            cout << "❌ Add patients first!\n";
+            return;
+        }
+        Bill b;
+        b.id = billCounter++;
+        cout << "Enter patient ID: ";
+        cin >> b.patientId;
+        cout << "Enter bill amount: ";
+        cin >> b.amount;
+        b.status = "Unpaid";
+        bills.push_back(b);
+        cout << "✅ Bill generated successfully!\n";
+    }
+
+    void viewBills() {
+        cout << "\n---- Billing Records ----\n";
+        cout << left << setw(5) << "ID" << setw(10) << "PatID"
+             << setw(15) << "Amount" << setw(10) << "Status" << endl;
+        for (auto &b : bills)
+            cout << left << setw(5) << b.id << setw(10) << b.patientId
+                 << setw(15) << b.amount << setw(10) << b.status << endl;
+    }
+
+    void payBill() {
+        int id;
+        cout << "Enter bill ID to mark as paid: ";
+        cin >> id;
+        for (auto &b : bills) {
+            if (b.id == id) {
+                b.status = "Paid";
+                cout << "✅ Bill marked as paid!\n";
+                return;
+            }
+        }
+        cout << "❌ Bill not found!\n";
+    }
+
+    // ---- Main Menu ----
+    void menu() {
+        int choice;
+        do {
+            cout << "\n===== HOSPITAL MANAGEMENT SYSTEM =====\n";
+            cout << "1. Add Patient\n2. View Patients\n3. Add Doctor\n4. View Doctors\n";
+            cout << "5. Book Appointment\n6. View Appointments\n7. Generate Bill\n8. View Bills\n9. Pay Bill\n0. Exit\n";
+            cout << "Enter choice: ";
+            cin >> choice;
+
+            switch (choice) {
+                case 1: addPatient(); break;
+                case 2: viewPatients(); break;
+                case 3: addDoctor(); break;
+                case 4: viewDoctors(); break;
+                case 5: addAppointment(); break;
+                case 6: viewAppointments(); break;
+                case 7: generateBill(); break;
+                case 8: viewBills(); break;
+                case 9: payBill(); break;
+                case 0: cout << "Exiting...\n"; break;
+                default: cout << "Invalid choice!\n";
+            }
+        } while (choice != 0);
+    }
+};
+
+int main() {
+    HospitalSystem hs;
+    hs.menu();
+    return 0;
+}
