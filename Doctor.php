@@ -1,0 +1,2 @@
+<?php
+require_once "db.php";class Doctor{private $c;function __construct(){ $this->c=(new Database())->connect();}function add($n,$s){return $this->c->query("INSERT INTO doctors(name,specialty)VALUES('$n','$s')");}function all(){return $this->c->query("SELECT * FROM doctors")->fetch_all(MYSQLI_ASSOC);} }?>
